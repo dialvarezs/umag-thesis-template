@@ -1,7 +1,65 @@
-\documentclass{umag_thesis}
+\DocumentMetadata{pdfversion=2.0}
+\documentclass[letterpaper,10pt,final,spanish,oneside]{umagthesis}
+
+\usepackage{float}
+\usepackage[acronym,toc]{glossaries}
+
+\title{La Inteligencia Artificial}						% título de la tesis o trabajo
+\author{Juan Pérez Gómez}								% autor
+
+\supervisor{Dr. Carlos Cifuentes}						% supervisor
+\cosupervisor{Ing. Pedro Lagos}							% co-supervisor (opcional)
+
+\degree{Magíster en Ciencias}							% grado o título
+\department{Departamento de Ingeniería en Computación}	% departamento o unidad académica
+\faculty{Facultad de Ciencias}							% facultad
+\degreedate{Enero, 2024}								% fecha
+
+% frase de propósito, aparece en la portada
+% \graduationpurpose{Trabajo de aplicación para optar al título de}
+
+% imagen para la tapa
+\coverimage{images/ia_cover}
+
+% glosario
+\makenoidxglossaries
+\input{frontmatter/glossary.tex}
+
+% carga de referencias
+\addbibresource{chapters/1_introduction/references.bib}
+\addbibresource{chapters/2_description/references.bib}
+\addbibresource{chapters/3_discussion/references.bib}
+\addbibresource{references.bib}
 
 \begin{document}
 
+\makecover
+\maketitle
 
+\frontmatter
+
+\tableofcontents*
+
+\include{frontmatter/originality.tex}
+\include{frontmatter/acknowledgements.tex}
+
+\mainmatter
+
+\include{chapters/1_introduction/index.tex}
+\include{chapters/2_description/index.tex}
+\include{chapters/3_discussion/index.tex}
+
+\backmatter
+
+\begin{multicols}{2}[\printbibheading]
+	\printbibliography[heading=none]
+\end{multicols}
+
+\clearpage
+
+% imprimir glosario y acrónimos, en caso de que sea en inglés se puede quitar `toctitle` y `title`
+\printnoidxglossar`[toctitle=Glosario]
+
+\printnoidxglossary[type=\acronymtype, toctitle=Acrónimos y Abreviaturas, title=Acrónimos y Abreviaturas]
 
 \end{document}
