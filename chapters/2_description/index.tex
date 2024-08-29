@@ -38,7 +38,27 @@ El aprendizaje automático es el núcleo de muchas aplicaciones de \acrshort{ia}
 
 \subsection{Redes Neuronales y Aprendizaje Profundo}
 
-Las redes neuronales artificiales, inspiradas en el cerebro humano, son fundamentales para el aprendizaje profundo, una técnica que ha permitido avances significativos en reconocimiento de imágenes y voz.
+Las redes neuronales artificiales, inspiradas en el cerebro humano, son fundamentales para el aprendizaje profundo, una técnica que ha permitido avances significativos en reconocimiento de imágenes y voz. Algunas de las arquitecturas principales puedes observarse en la \autoref{tab:deep_learning_techniques}.
+
+\begin{table}[htb]
+	\small
+	\begin{tblr}{
+		colspec = {X[2,l] X[3,l] X[2,l] X[3,l]},
+		row{1} = {font=\bfseries, bg=gray9},
+		hline{1, Z} = {1pt},
+				hline{2} = {0.8pt},
+			}
+		Técnica     & Descripción                                       & Ventajas                                               & Desventajas                               \\
+		CNN         & Procesa datos en cuadrícula, como imágenes.       & Excelente en visión por computadora.                   & Requiere muchos datos y es costosa.       \\
+		RNN         & Adecuada para secuencias, como texto.             & Modela dependencias temporales.                        & Problemas con dependencias a largo plazo. \\
+		GAN         & Dos redes compiten para generar datos sintéticos. & Genera datos realistas.                                & Entrenamiento inestable.                  \\
+		Autoencoder & Comprime y reconstruye datos.                     & Reducción de dimensionalidad y detección de anomalías. & Reconstrucción puede ser pobre.           \\
+		Transformer & Modelo basado en atención, sin secuencialidad.    & Excelente en procesamiento de lenguaje natural.        & Requiere muchos recursos.                 \\
+	\end{tblr}
+	\caption{Principales técnicas de aprendizaje profundo.}
+	\label{tab:deep_learning_techniques}
+\end{table}
+
 
 \section{Aplicaciones de la Inteligencia Artificial}
 

@@ -1,21 +1,25 @@
 % Diego Alvarez S.
 % LateX class for theses at the University of Magallanes
-% Version 1.0.0
+% Version 1.1.0
 % 2024
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{umagthesis}[2024/02/28 UMAG Thesis Format]
+\ProvidesClass{umagthesis}[2024/08/29 UMAG Thesis Format]
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{memoir}}
 
 \ProcessOptions\relax
 \LoadClass{memoir}
 
+\let\printglossary\relax
+\let\theglossary\relax
+\let\endtheglossary\relax
+
 % packages
 \RequirePackage{fontspec}
 \RequirePackage{graphicx}
 \RequirePackage{fancyhdr}
 \RequirePackage[dvipsnames]{xcolor}
-\RequirePackage[hypcap=false]{caption}
+\RequirePackage[hypcap=false,labelsep=period]{caption}
 \RequirePackage{setspace}
 \RequirePackage{enumitem}
 \RequirePackage{csquotes}
@@ -38,7 +42,8 @@
 	bottom     = 2.5cm,
 	outer      = 2.5cm,
 	inner      = 3cm,
-	headsep    = 0.6cm,
+	headheight = 15pt,
+	headsep    = 0.5cm,
 	footskip   = 1cm,
 ]{geometry}
 
@@ -117,7 +122,7 @@
 \def\@graduationpurpose{Tesis para optar al grado de}
 
 \newcommand{\graduationpurpose}[1]{%
-    \renewcommand{\@graduationpurpose}{#1}%
+	\renewcommand{\@graduationpurpose}{#1}%
 }
 
 \newcommand{\logo}[1][4cm]{\includegraphics[width=#1]{.cls_resources/img/umag_logo}}
@@ -171,10 +176,10 @@
 \newcommand{\drawThumb}[2][r]{
 	\begin{tikzpicture}[remember picture,overlay]
 		\ifthenelse{\equal{#1}{r}}{%
-			\node [fill=umagVioletLighter, text=white, minimum width=1cm, minimum height=2cm, anchor=north east]
+			\node [fill=umagVioletLighter, text=white, minimum width=0.05\paperwidth, minimum height=0.08\paperheight, anchor=north east]
 			at ([xshift=1pt,yshift=-\thumbVpos]current page.north east) {\headingfont\itshape\HUGE#2};
 		}{%
-			\node [fill=umagVioletLighter, text=white, minimum width=1cm, minimum height=2cm, anchor=north west]
+			\node [fill=umagVioletLighter, text=white, minimum width=0.05\paperwidth, minimum height=0.08\paperheight, anchor=north west]
 			at ([xshift=-1pt,yshift=-\thumbVpos]current page.north west) {\headingfont\itshape\HUGE#2};
 		}
 	\end{tikzpicture}
@@ -197,7 +202,7 @@
 	\if@mainmatter
 		\placeThumb
 	\else
-		\if@frontmatter \placeThumb[P] \else \placeThumb[\#] \fi
+		\if@frontmatter \else \placeThumb[A] \fi
 	\fi
 }
 
@@ -207,27 +212,32 @@
 }
 
 % page style
-\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\chaptermark}[1]{\markboth{\if@mainmatter\chaptername~\thechapter\else#1\fi}{#1}}
+\renewcommand{\sectionmark}[1]{\markright{\if@mainmatter\rightmark\else#1\fi}}
 
 \fancypagestyle{fancy}{
 	\fancyhf{}
 	\ifthenelse{\boolean{@twoside}}{
-		\fancyhead[LE]{\small\color{gray50}\truncate{\textwidth}{\nouppercase{\leftmark}}}
-		\fancyhead[RO]{\small\color{gray50}\raggedleft{\truncate{\textwidth}{\nouppercase{\rightmark}}}}
+		\fancyheadoffset[LE,RO]{1cm}
+		\fancyhead[LE]{\scshape\color{gray50}\truncate{\textwidth}{\makebox[1cm]{\thepage\hfill}\leftmark}}
+		\fancyhead[RO]{\scshape\color{gray50}\raggedleft{\truncate{\textwidth}{\rightmark}\makebox[1cm]{\hfill\thepage}}}
 	}{%
-		\fancyhead[L]{\small\color{gray50}\truncate{0.475\textwidth}{\nouppercase{\leftmark}}}
-		\fancyhead[R]{\small\color{gray50}\raggedleft{\truncate{0.475\textwidth}{\nouppercase{\rightmark}}}}
+		\fancyheadoffset[R]{1cm}
+		\fancyhead[L]{\scshape\color{gray50}\truncate{0.475\textwidth}{\leftmark}}
+		\fancyhead[R]{\scshape\color{gray50}\raggedleft{\truncate{0.475\textwidth}{\rightmark}\makebox[1cm]{\hfill\thepage}}}
 	}
 	\fancyfoot[C]{
-		\small\color{gray70}\thepage%
 		\thumbindex
+	}
+	\renewcommand{\headrulewidth}{0.3pt}
+	\renewcommand{\headrule}{
+		\vskip-6pt\hbox to\headwidth{\color{gray70}\leaders\hrule height \headrulewidth\hfill}
 	}
 }
 
 \fancypagestyle{plain}{%
 	\fancyhf{}%
 	\fancyfoot[C]{%
-		\small\color{gray70}\thepage%
 		\thumbindex
 	}
 	\renewcommand{\headrulewidth}{0pt}
@@ -323,14 +333,19 @@
 
 % toc
 \maxtocdepth{section}
-\renewcommand{\cftchapterfont}{\bfseries\color{umagViolet}}
+\renewcommand{\cftchapterfont}{\bfseries\color{umagViolet}\MakeUppercase}
 \renewcommand{\cftchapterpagefont}{\bfseries\color{umagViolet}}
+\renewcommand\cftchaptername{\chaptername~}
 
 % chapter title style
-\renewcommand{\printchaptername}{}
+\def\@chaptitle{\@ifclasswith{umagthesis}{spanish}{ CAPÍTULO }{ CHAPTER }}
+\renewcommand{\printchaptername}{\raggedleft\headingfont\fontsize{40}{52}\bfseries\color{umagViolet} \@chaptitle}
 \renewcommand{\chapnumfont}{\raggedleft\headingfont\fontsize{90}{92}\bfseries\color{umagViolet}}
-\renewcommand{\chaptitlefont}{\raggedleft\normalfont\headingfont\Huge\color{umagViolet}}
-\renewcommand{\afterchapternum}{\par\smallskip}
+\renewcommand{\chaptitlefont}{%
+	\raggedleft\normalfont\headingfont\huge\color{umagViolet}%
+	\setlength{\baselineskip}{0.75\baselineskip}%
+}
+\renewcommand{\afterchapternum}{\par\bigskip}
 \setlength{\afterchapskip}{4em}
 
 % section title style
@@ -340,10 +355,8 @@
 \setsubsubsecheadstyle{\normalsize\color{umagViolet}}
 
 % captions
-\captionsetup{
-	labelfont = bf,
-	labelsep  = period
-}
+\captionnamefont{\small\bfseries}
+\captiontitlefont{\small}
 
 % spacing and other options
 \OnehalfSpacing
